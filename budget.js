@@ -24,10 +24,14 @@ const incomeTitle = document.getElementById('income-title-input');
 const incomeAmount = document.getElementById('income-amount-input');
 
 // VARIABLES
-let ENTRY_LIST = [];
+let ENTRY_LIST;
 let balance = 0, income = 0, outcome = 0;
 
 const DELETE = 'delete', EDIT = 'edit';
+
+// LOOK IF THERE IS SAVED DATA IN LOCALSTORAGE
+ENTRY_LIST = JSON.parse(localStorage.getItem('entry_list')) || [];
+updateUI();
 
 // EVENT LISTENERS
 expenseBtn.addEventListener('click', () => {
@@ -99,8 +103,6 @@ function updateUI() {
 
     clearElement([expenseList, incomeList, allList]);
 
-   
-
     ENTRY_LIST.forEach((entry, index) => {
         if (entry.type == 'expense') {
             showEntry(expenseList, entry.type, entry.title, entry.amount, index);
@@ -111,6 +113,8 @@ function updateUI() {
     });
 
     updateChart(income, outcome);
+
+    localStorage.setItem('entry_list', JSON.stringify(ENTRY_LIST));
 }
 
 function showEntry(list, type, title, amount, id) {
